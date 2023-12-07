@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const usuarioSchema = Schema({
+const userSchema = Schema({
 	name: {
 		type: String,
 		required: true,
@@ -19,9 +19,9 @@ const usuarioSchema = Schema({
 
 	rol: {
 		type: String,
-		default: 'usuario',
+		default: 'user',
 	},
 });
 
-module.exports = model('Usuarios', usuarioSchema);
+module.exports = model('User', userSchema);
 

@@ -1,24 +1,25 @@
 const express = require('express');
 const { check } = require('express-validator');
-const { validarCampos } = require('../middlewares/validarCampos');
+const { validateFields } = require('../middlewares/validateFields');
 const {
-	cargarUsuarios,
-	crearProducto,
-	cargarProductos,
-	eliminarProducto,
-	editarProducto,
+	uploadUser,
+	createProduct,
+	uploadProduct,
+	deleteProduct,
+	editProduct,
 } = require('../controllers/admin.controllers');
-const { validarJWT } = require('../middlewares/validarJWT');
+const { validateJWT } = require('../middlewares/validateJWT');
+const { validateFields } = require('../middlewares/validateFields');
 
 //va a ser el nombre del router que definamos
 const routerAdmin = express.Router();
 
-routerAdmin.get('/cargarUsuario', validarJWT, cargarUsuarios);
+routerAdmin.get('/uploaduser', validateJWT, uploadUser);
 
 routerAdmin.post(
 	'/new',
 	[
-		validarJWT,
+		validateJWT,
 
 		check('name', 'El nombre es obligatorio').not().isEmpty(),
 		check('precio', 'Por favor ingrese un valor').not().isEmpty(),
@@ -26,16 +27,16 @@ routerAdmin.post(
 			min: 10,
 		}),
 
-		validarCampos,
+		validateFields,
 	],
-	crearProducto
+	createProduct
 );
 
-routerAdmin.get('/cargarProducto', validarJWT, cargarProductos);
+routerAdmin.get('/uploadproduct', validateJWT, uploadProduct);
 
-routerAdmin.delete('/eliminar/:id', validarJWT, eliminarProducto);
+routerAdmin.delete('/delete/:id', validateJWT, deleteProduct);
 
-routerAdmin.put('/editar', validarJWT, editarProducto);
+routerAdmin.put('/edit', validateJWT, editProduct);
 
 module.exports = routerAdmin;
 

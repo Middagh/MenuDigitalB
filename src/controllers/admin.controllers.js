@@ -1,13 +1,13 @@
-const Producto = require('../model/producto-model');
-const Usuarios = require('../model/usuario-model');
+const Product = require('../model/product-model');
+const User = require('../model/user-model');
 
-const cargarUsuarios = async (req, res) => {
+const uploadUser = async (req, res) => {
 	try {
-		const usuarios = await Usuarios.find();
+		const user = await User.find();
 
 		res.status(200).json({
 			msg: 'usuarios enviados',
-			usuarios,
+			user,
 		});
 	} catch (error) {
 		res.status(500).json({
@@ -16,16 +16,16 @@ const cargarUsuarios = async (req, res) => {
 	}
 };
 
-const crearProducto = async (req, res) => {
+const createProduct = async (req, res) => {
 	try {
-		const producto = new Producto(req.body);
+		const product = new Product(req.body);
 
 		//guardar usuario en DB
-		await producto.save();
+		await product.save();
 
 		res.status(201).json({
 			msg: 'Producto Creado',
-			producto,
+			product,
 		});
 	} catch (error) {
 		res.status(500).json({
@@ -34,13 +34,13 @@ const crearProducto = async (req, res) => {
 	}
 };
 
-const cargarProductos = async (req, res) => {
+const uploadProduct = async (req, res) => {
 	try {
-		const productos = await Producto.find();
+		const product = await Product.find();
 
 		res.status(200).json({
 			msg: 'productos enviados',
-			productos,
+			product,
 		});
 	} catch (error) {
 		res.status(500).json({
@@ -49,17 +49,17 @@ const cargarProductos = async (req, res) => {
 	}
 };
 
-const eliminarProducto = async (req, res) => {
+const deleteProduct = async (req, res) => {
 	try {
-		const productoEliminar = await Producto.findById(req.params.id);
+		const deleteProduct = await Product.findById(req.params.id);
 
-		if (!productoEliminar) {
+		if (!deleteProduct) {
 			return res.status(400).json({
 				msg: 'no existe un producto con este ID',
 			});
 		}
 
-		await Producto.findByIdAndDelete(req.params.id);
+		await Product.findByIdAndDelete(req.params.id);
 
 		res.status(200).json({
 			msg: 'producto Eliminado',
@@ -71,17 +71,17 @@ const eliminarProducto = async (req, res) => {
 	}
 };
 
-const editarProducto = async (req, res) => {
+const editProduct = async (req, res) => {
 	try {
-		const productoEditar = await Producto.findById(req.body._id);
+		const editProduct = await Product.findById(req.body._id);
 
-		if (!productoEditar) {
+		if (!editProduct) {
 			return res.status(400).json({
 				msg: 'no existe un producto con este ID para editar',
 			});
 		}
 
-		await Producto.findByIdAndUpdate(req.body._id, req.body);
+		await Product.findByIdAndUpdate(req.body._id, req.body);
 
 		res.status(200).json({
 			msg: 'producto Editado',
@@ -94,9 +94,9 @@ const editarProducto = async (req, res) => {
 };
 
 module.exports = {
-	cargarUsuarios,
-	crearProducto,
-	cargarProductos,
-	eliminarProducto,
-	editarProducto,
+	uploadUser,
+	createProduct,
+	uploadProduct,
+	deleteProduct,
+	editProduct,
 };

@@ -1,33 +1,33 @@
-const Usuarios = require('../model/usuario-model');
+const User = require('../model/user-model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const crearUsuario = async (req, res) => {
+const createUser = async (req, res) => {
 	const { name, email, password } = req.body;
 
 	try {
 		//validar si el email del usuario existe en la base de datos
-		let usuario = await Usuarios.findOne({ email });
+		let user = await User.findOne({ email });
 
-		if (usuario) {
+		if (user) {
 			return res.status(400).json({
 				msg: 'El email que intenta registrase ya existe',
 			});
 		}
 
-		usuario = new Usuarios(req.body);
+		user = new User(req.body);
 
 		//encriptar contraseña
 		const salt = bcrypt.genSaltSync(10);
-		usuario.password = bcrypt.hashSync(password, salt);
+		user.password = bcrypt.hashSync(password, salt);
 
 		//guardar usuario en DB
-		await usuario.save();
+		await user.save();
 
 		//generar Token
 		const payload = {
-			name: usuario.name,
-			id: usuario._id,
+			name: user.name,
+			id: user._id,
 		};
 
 		const token = jwt.sign(payload, process.env.SECRET_JWT, {
@@ -45,24 +45,24 @@ const crearUsuario = async (req, res) => {
 	}
 };
 
-const loginUsuario = async (req, res) => {
+const loginUser = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 
 		//validacion si existe el usuario
-		let usuario = await Usuarios.findOne({ email });
+		let user = await User.findOne({ email });
 
 		//si el usuario no existe
-		if (!usuario) {
+		if (!user) {
 			return res.status(400).json({
 				msg: 'El Email o la contraseña es incorrectas',
 			});
 		}
 
 		//confirmar contraseñas
-		const validarPassword = bcrypt.compareSync(password, usuario.password);
+		const validatePassword = bcrypt.compareSync(password, usuario.password);
 
-		if (!validarPassword) {
+		if (!validatePassword) {
 			res.status(400).json({
 				msg: 'El email o la contraseña es incorrectos',
 			});
@@ -70,8 +70,8 @@ const loginUsuario = async (req, res) => {
 
 		//generar Token
 		const payload = {
-			name: usuario.name,
-			id: usuario._id,
+			name: user.name,
+			id: user._id,
 		};
 
 		const token = jwt.sign(payload, process.env.SECRET_JWT, {
@@ -90,6 +90,6 @@ const loginUsuario = async (req, res) => {
 };
 
 module.exports = {
-	crearUsuario,
-	loginUsuario,
+	createUser,
+	loginUser,
 };
