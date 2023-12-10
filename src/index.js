@@ -1,6 +1,6 @@
 //importamos express
 const express = require('express');
-const { dbConnection } = require('./src/database/config');
+const { dbConnection } = require('./database/config');
 const app = express();
 const cors = require('cors');
 
@@ -17,9 +17,9 @@ app.use(cors());
 dbConnection();
 
 //conectamos nuestras rutas con el archivo raiz en este ejemplo "/auth" va a ser que todos las funciones que se encuentren en "./routes/auth" va a ser que tengan por implicito la ruta /auth
-app.use('/auth', require('./src/routes/auth'));
+app.use('/auth', require('./routes/auth'));
 
-app.use('/admin', require('./src/routes/admin'));
+app.use('/admin', require('./routes/admin'));
 
 //definimos el puerto en donde vamos a estar trabajando
 app.listen(process.env.PORT, () => {

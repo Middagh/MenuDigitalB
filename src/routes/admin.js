@@ -9,7 +9,6 @@ const {
 	editProduct,
 } = require('../controllers/admin.controllers');
 const { validateJWT } = require('../middlewares/validateJWT');
-const { validateFields } = require('../middlewares/validateFields');
 
 //va a ser el nombre del router que definamos
 const routerAdmin = express.Router();
@@ -23,7 +22,7 @@ routerAdmin.post(
 
 		check('name', 'El nombre es obligatorio').not().isEmpty(),
 		check('precio', 'Por favor ingrese un valor').not().isEmpty(),
-		check('descripcion', 'la descripcion no es valida').isLength({
+		check('descripción', 'la descripcion no es válida').isLength({
 			min: 10,
 		}),
 
