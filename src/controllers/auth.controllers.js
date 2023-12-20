@@ -6,7 +6,7 @@ const createUser = async (req, res) => {
 	const { name, email, password } = req.body;
 
 	try {
-		//validar si el email del usuario existe en la base de datos
+		//validar si el email del usuario existe en la base de datos, chequea 
 		let user = await User.findOne({ email });
 
 		if (user) {
@@ -15,7 +15,7 @@ const createUser = async (req, res) => {
 			});
 		}
 
-		user = new User(req.body);
+		user = new User(req.body); // comienza la acción de un nuevo usuario para crearse
 
 		//encriptar contraseña
 		const salt = bcrypt.genSaltSync(10);
@@ -60,7 +60,7 @@ const loginUser = async (req, res) => {
 		}
 
 		//confirmar contraseñas
-		const validatePassword = bcrypt.compareSync(password, usuario.password);
+		const validatePassword = bcrypt.compareSync(password, user.password);
 
 		if (!validatePassword) {
 			res.status(400).json({
@@ -75,7 +75,7 @@ const loginUser = async (req, res) => {
 		};
 
 		const token = jwt.sign(payload, process.env.SECRET_JWT, {
-			expiresIn: '30d',
+			expiresIn: '7h',
 		});
 
 		res.status(200).json({

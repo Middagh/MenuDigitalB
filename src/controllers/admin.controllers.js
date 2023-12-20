@@ -1,13 +1,14 @@
 const Product = require('../model/product-model');
 const User = require('../model/user-model');
 
-const uploadUser = async (req, res) => {
+//trae a los usuarios registrados del db
+const getUser = async (req, res) => {
 	try {
-		const user = await User.find();
+		const user = await User.find(); //busca al usuario
 
 		res.status(200).json({
 			msg: 'usuarios enviados',
-			user,
+			user, //envia efectivamente los usuarios
 		});
 	} catch (error) {
 		res.status(500).json({
@@ -15,17 +16,17 @@ const uploadUser = async (req, res) => {
 		});
 	}
 };
-
+//creación del producto
 const createProduct = async (req, res) => {
 	try {
 		const product = new Product(req.body);
 
-		//guardar usuario en DB
+		//guardar producto en DB
 		await product.save();
 
 		res.status(201).json({
 			msg: 'Producto Creado',
-			product,
+			
 		});
 	} catch (error) {
 		res.status(500).json({
@@ -33,8 +34,8 @@ const createProduct = async (req, res) => {
 		});
 	}
 };
-
-const uploadProduct = async (req, res) => {
+// carga de todos los productos
+const getProduct = async (req, res) => {
 	try {
 		const product = await Product.find();
 
@@ -48,10 +49,10 @@ const uploadProduct = async (req, res) => {
 		});
 	}
 };
-
+// eliminar producto
 const deleteProduct = async (req, res) => {
 	try {
-		const deleteProduct = await Product.findById(req.params.id);
+		const deleteProduct = await Product.findById(req.params.id); //findbyid busca lo que quiero eliminar
 
 		if (!deleteProduct) {
 			return res.status(400).json({
@@ -59,7 +60,7 @@ const deleteProduct = async (req, res) => {
 			});
 		}
 
-		await Product.findByIdAndDelete(req.params.id);
+		await Product.findByIdAndDelete(req.params.id); //función que efectivamente elimina
 
 		res.status(200).json({
 			msg: 'producto Eliminado',
@@ -71,6 +72,7 @@ const deleteProduct = async (req, res) => {
 	}
 };
 
+//modificar producto
 const editProduct = async (req, res) => {
 	try {
 		const editProduct = await Product.findById(req.body._id);
@@ -81,7 +83,7 @@ const editProduct = async (req, res) => {
 			});
 		}
 
-		await Product.findByIdAndUpdate(req.body._id, req.body);
+		await Product.findByIdAndUpdate(req.body._id, req.body); //sintaxis con la que se hacen los cambios
 
 		res.status(200).json({
 			msg: 'producto Editado',
@@ -94,9 +96,9 @@ const editProduct = async (req, res) => {
 };
 
 module.exports = {
-	uploadUser,
+	getUser,
 	createProduct,
-	uploadProduct,
+	getProduct,
 	deleteProduct,
 	editProduct,
 };

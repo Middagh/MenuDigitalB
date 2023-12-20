@@ -7,7 +7,7 @@ const { validateFields } = require('../middlewares/validateFields');
 const routerAuth = express.Router();
 
 routerAuth.post(
-	'/createUser',
+	'/createuser',
 	[
 		check('name', 'El nombre es obligatorio').not().isEmpty(),
 		check('email', 'El email no es valido').not().isEmpty().isEmail(),
