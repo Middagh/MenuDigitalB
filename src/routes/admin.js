@@ -23,11 +23,11 @@ routerAdmin.post(
 	createProduct
 );
 
-routerAdmin.get('/getproduct', validateJWT, getProduct);
+routerAdmin.get('/getproduct', getProduct);
 
 routerAdmin.delete('/delete/:id', deleteProduct);
 
-routerAdmin.put('/edit', editProduct);
+routerAdmin.put('/edit', editProduct); 
 
 module.exports = routerAdmin;
 
