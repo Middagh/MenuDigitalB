@@ -6,7 +6,7 @@ const createUser = async (req, res) => {
 	const { name, email, password } = req.body;
 
 	try {
-		//validar si el email del usuario existe en la base de datos
+		// Validar si el email del usuario existe en la base de datos
 		let user = await User.findOne({ email });
 
 		if (user) {
@@ -15,19 +15,31 @@ const createUser = async (req, res) => {
 			});
 		}
 
-		user = new User(req.body);
+		// Establecer el rol y estado predeterminados
+		const rol = 'user';
+		const status = 'active';
 
-		//encriptar contraseña
+		user = new User({
+			name,
+			email,
+			password,
+			rol,
+			status,
+		});
+
+		// Encriptar contraseña
 		const salt = bcrypt.genSaltSync(10);
 		user.password = bcrypt.hashSync(password, salt);
 
-		//guardar usuario en DB
+		// Guardar usuario en DB
 		await user.save();
 
-		//generar Token
+		// Generar Token
 		const payload = {
 			name: user.name,
 			id: user._id,
+			rol: user.rol,
+			status: user.status,
 		};
 
 		const token = jwt.sign(payload, process.env.SECRET_JWT, {
@@ -49,18 +61,25 @@ const loginUser = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 
-		//validacion si existe el usuario
+		// Validar si existe el usuario
 		let user = await User.findOne({ email });
 
-		//si el usuario no existe
+		// Si el usuario no existe
 		if (!user) {
 			return res.status(400).json({
 				msg: 'El Email o la contraseña es incorrectas',
 			});
 		}
 
-		//confirmar contraseñas
-		const validatePassword = bcrypt.compareSync(password, usuario.password);
+		// Verificar que el usuario esté activo
+		if (user.status !== 'active') {
+			return res.status(400).json({
+				msg: 'Usuario inactivo. Hable con el administrador.',
+			});
+		}
+
+		// Confirmar contraseñas
+		const validatePassword = bcrypt.compareSync(password, user.password);
 
 		if (!validatePassword) {
 			res.status(400).json({
@@ -68,14 +87,16 @@ const loginUser = async (req, res) => {
 			});
 		}
 
-		//generar Token
+		// Generar Token
 		const payload = {
 			name: user.name,
 			id: user._id,
+			rol: user.rol,
+			status: user.status,
 		};
 
 		const token = jwt.sign(payload, process.env.SECRET_JWT, {
-			expiresIn: '30d',
+			expiresIn: '7h',
 		});
 
 		res.status(200).json({
@@ -88,6 +109,7 @@ const loginUser = async (req, res) => {
 		});
 	}
 };
+
 
 module.exports = {
 	createUser,

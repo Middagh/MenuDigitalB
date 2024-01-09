@@ -21,6 +21,11 @@ const userSchema = Schema({
 		type: String,
 		default: 'user',
 	},
+	
+	status: {
+        type: String,
+        default: 'active',
+    },
 });
 
 module.exports = model('User', userSchema);

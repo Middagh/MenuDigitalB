@@ -6,12 +6,12 @@ const productSchema = Schema({
 		required: true,
 	},
 
-	precio: {
+	price: {
 		type: Number,
 		required: true,
 	},
 
-	descripcion: {
+	description: {
 		type: String,
 		required: true,
 	},
