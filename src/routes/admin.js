@@ -1,7 +1,7 @@
 const express = require('express');
 const { check } = require('express-validator');
 const { validateFields } = require('../middlewares/validateFields');
-const {getUser, deleteUser, createProduct, getProduct, deleteProduct, editProduct,} = require('../controllers/admin.controllers');
+const { getUser, deleteUser, createProduct, getProduct, deleteProduct, editProduct, } = require('../controllers/admin.controllers');
 const { validateJWT } = require('../middlewares/validateJWT');
 
 //va a ser el nombre del router que definamos
@@ -29,7 +29,7 @@ routerAdmin.delete('/delete/:id', deleteProduct);
 
 routerAdmin.delete('/deleteuser/:id', deleteUser);
 
-routerAdmin.put('/edit', editProduct); 
+routerAdmin.put('/edit', editProduct);
 
 module.exports = routerAdmin;
 
